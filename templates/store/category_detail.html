@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category.name }} - Notashop{% endblock %}
+
+{% block content %}
+    <h2>{{ category.name }}</h2>
+    <p>{{ category.description }}</p>
+
+    <h3>Stickers in this category:</h3>
+    <ul>
+        {% for sticker in stickers %}
+            <li>
+                <a href="{% url 'sticker_detail' sticker.slug %}">
+                    {{ sticker.name }} - {{ sticker.price }}$
+                </a>
+            </li>
+        {% empty %}
+            <li>No stickers found in this category.</li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{% url 'category_list' %}">Back to categories</a></p>
+{% endblock %}

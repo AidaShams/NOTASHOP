@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}{{ sticker.name }} - Notashop{% endblock %}
+
+{% block content %}
+    <h2>{{ sticker.name }}</h2>
+    <p><strong>Price:</strong> {{ sticker.price }}$</p>
+    <p><strong>Category:</strong> {{ sticker.category.name }}</p>
+    <p>{{ sticker.description }}</p>
+
+    {% if sticker.image %}
+        <img src="{{ sticker.image.url }}" alt="{{ sticker.name }}" width="300">
+    {% endif %}
+
+    <p><a href="{% url 'sticker_list' %}">Back to stickers</a></p>
+{% endblock %}

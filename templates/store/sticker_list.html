@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}All Stickers - Notashop{% endblock %}
+
+{% block content %}
+    <h2>All Stickers</h2>
+    <ul>
+        {% for sticker in stickers %}
+            <li>
+                <a href="{% url 'sticker_detail' sticker.slug %}">
+                    {{ sticker.name }} - {{ sticker.price }}$
+                </a>
+            </li>
+        {% empty %}
+            <li>No stickers available.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,17 +1,8 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block title %}Home{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Home - Notashop{% endblock %}
 
 {% block content %}
-<h1>All Stickers</h1>
-<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-  {% for sticker in stickers %}
-    <div class="border p-4 rounded">
-      <img src="{{ sticker.image.url }}" class="w-full h-48 object-cover mb-2">
-      <h2>{{ sticker.name }}</h2>
-      <p>${{ sticker.price }}</p>
-      <a href="{% url 'store:sticker_detail' sticker.id %}">View</a>
-    </div>
-  {% endfor %}
-</div>
+    <h2>Welcome to Notashop!</h2>
+    <p>Discover cool stickers and more.</p>
 {% endblock %}

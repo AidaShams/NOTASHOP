@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Categories - Notashop{% endblock %}
+
+{% block content %}
+    <h2>Sticker Categories</h2>
+    <ul>
+        {% for category in categories %}
+            <li>
+                <a href="{% url 'category_detail' category.slug %}">
+                    {{ category.name }}
+                </a>
+            </li>
+        {% empty %}
+            <li>No categories found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
