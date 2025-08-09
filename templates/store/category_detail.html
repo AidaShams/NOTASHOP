@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ category.name }} - Notashop{% endblock %}
 
@@ -19,5 +20,5 @@
         {% endfor %}
     </ul>
 
-    <p><a href="{% url 'category_list' %}">Back to categories</a></p>
+    <p><a href="{% url 'category_list' %}">Back To Categories.</a></p>
 {% endblock %}

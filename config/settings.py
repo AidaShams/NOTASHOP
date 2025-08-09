@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'store',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -124,10 +125,10 @@ STATICFILES_DIRS = [str(BASE_DIR.joinpath('static'))]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL  = 'home'
+LOGIN_REDIRECT_URL  = '/'
 LOGOUT_REDIRECT_URL  = 'login'
 
-# AUTH_USER_MODEL = 'accounts.CustomUserRegistration'
+AUTH_USER_MODEL = 'accounts.CustomUserRegistration'
 #for adding images:
 MEDIA_URL = '/media/'
 MEDIA_ROOT = [str(BASE_DIR.joinpath('media'))]

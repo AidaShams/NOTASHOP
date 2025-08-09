@@ -1,24 +1,70 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Notashop{% endblock %}</title>
-{#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}
+    <meta charset="UTF-8"/>
+    <title>Nota Shop</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600;800&display=swap" rel="stylesheet"/>
 </head>
 <body>
-    <header>
-        <h1><a href="{% url 'home' %}">Notashop</a></h1>
-        <nav>
+
+<header>
+    <div class="header-left">
+        <a href="{% url 'home' %}" class="home-button" aria-label="Home">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="#2c2c2c" viewBox="0 0 24 24" width="28" height="28"
+                 aria-hidden="true">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+        </a>
+
+        {% if not user.is_authenticated %}
+            <nav class="auth-nav">
+                <a href="{% url 'login' %}" class="btn">Login</a>
+                <a href="{% url 'signup' %}" class="btn">Sign Up</a>
+            </nav>
+        {% else %}
+            <nav class="auth-nav">
+                <span class="nav-welcome">Hi, {{ user.username }}</span>
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Logout</button>
+                </form>
+            </nav>
+        {% endif %}
+    </div>
+
+    <div class="header-center">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Nota Shop Logo" class="logo"/>
+        </a>
+    </div>
+
+    <div class="header-right">
+        <button id="menu-toggle" aria-label="Toggle menu">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="#2c2c2c" viewBox="0 0 24 24" width="28" height="28"
+                 aria-hidden="true">
+                <path d="M3 6h18M3 12h18M3 18h18" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </button>
+
+        <nav id="dropdown-menu" class="dropdown-menu" aria-hidden="true">
             <a href="{% url 'sticker_list' %}">Stickers</a>
+            <a href="{% url 'category_list' %}">Categories</a>
         </nav>
-    </header>
+    </div>
+</header>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+<main>
+    <div class="card">
+        {% block content %}
+        {% endblock %}
+    </div>
+</main>
 
-    <footer>
-        <p>&copy; 2025 Notashop</p>
-    </footer>
+<footer>
+    &copy; 2025 Nota Shop — All Rights Reserved
+</footer>
+
 </body>
 </html>

@@ -1,0 +1,8 @@
+{%extends 'base.html'%}
+{%block content%}
+{%for i in data%}
+<a href="{%url 'detail' i.id%}">{{i.title}}</a>
+<a href="{%url 'update' i.id%}"><li>update</li></a>
+<a href="{%url 'delete' i.id%}"><li>delete</li></a>
+{%endfor%}
+{%endblock content%}

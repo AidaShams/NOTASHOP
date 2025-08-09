@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&family=Poppins:wght@400;600&display=swap');
+
+/* ======== Base Styling ======== */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #2c2c2c;
+    background: linear-gradient(145deg, #fffaf0, #f0fff5);
+    background-image: radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 0);
+    background-size: 24px 24px;
+    line-height: 1.6;
+}
+
+/* ======== Typography & Links ======== */
+a {
+    color: #2c2c2c;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: #e63946;
+    transform: scale(1.05);
+    text-decoration: underline;
+}
+
+h1, h2, h3 {
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.2rem;
+    color: #1a1a1a;
+}
+
+/* ======== Logo Container (centered absolutely in header) ======== */
+.logo-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 0;
+    width: auto;
+    text-align: center;
+    z-index: 10;
+}
+
+.logo {
+    height: 100px;    /* adjust size as needed */
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.1));
+    transition: filter 0.3s ease;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.logo:hover {
+    filter: drop-shadow(2px 2px 6px rgba(214, 69, 80, 0.4));
+}
+
+/* ======== Header & Navigation ======== */
+header {
+    position: relative; /* make absolute children relative to this */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #ffffff;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    top: 0;
+    z-index: 1000;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.home-button {
+    display: flex;
+    align-items: center;
+    color: #2c2c2c;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.home-button:hover svg {
+    fill: #e63946;
+}
+
+.auth-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.auth-nav a.btn {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 24px;
+    background-color: #ff6f61;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 111, 97, 0.25);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.auth-nav a.btn:hover {
+    background-color: #e63946;
+    box-shadow: 0 6px 20px rgba(214, 69, 80, 0.4);
+}
+
+.nav-welcome {
+    font-weight: 600;
+    color: #2c2c2c;
+    padding-right: 0.8rem;
+}
+
+/* Header right side */
+.header-right {
+    position: relative;
+}
+
+/* Hamburger button */
+#menu-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    display: none;
+    flex-direction: column;
+    min-width: 140px;
+    z-index: 2000;
+}
+
+.dropdown-menu a {
+    padding: 0.8rem 1rem;
+    text-decoration: none;
+    color: #2c2c2c;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu a:hover {
+    background-color: #ff6f61;
+    color: white;
+}
+
+.dropdown-menu.active {
+    display: flex;
+}
+
+/* ======== Main Content ======== */
+main {
+    max-width: 1000px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 20px;
+    position: relative;
+    z-index: 1;
+    box-shadow:
+        0 0 0 6px transparent,
+        0 0 0 12px #fff,
+        0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+main::before {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    z-index: -1;
+    background: linear-gradient(
+        135deg,
+        #ff6f61,
+        #f39c12,
+        #f1c40f,
+        #2ecc71,
+        #3498db,
+        #9b59b6,
+        #ff6f61
+    );
+    border-radius: 24px;
+    background-size: 300% 300%;
+    animation: rainbowFlow 30s ease infinite;
+    filter: blur(18px);
+    opacity: 0.8;
+}
+
+@keyframes rainbowFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ======== Buttons ======== */
+button, .btn {
+    background: #ff6f61;
+    border: none;
+    color: #fff;
+    padding: 0.6rem 1.6rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.06em;
+    box-shadow: 0 4px 12px rgba(255, 111, 97, 0.25);
+}
+
+button:hover, .btn:hover {
+    background: #e63946;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(214, 69, 80, 0.4);
+}
+
+/* ======== Product Grid ======== */
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.product-card {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 32px rgba(255, 111, 97, 0.3);
+}
+
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.07);
+}
+
+.product-card h3 {
+    font-size: 1.2rem;
+    margin: 1rem;
+    color: #2c2c2c;
+}
+
+.product-card p {
+    margin: 0 1rem 1rem 1rem;
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* ======== Footer ======== */
+footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    border-top: 1px solid #ddd;
+    background: #fefefe;
+    margin-top: 4rem;
+}
+
+/* ======== Utilities ======== */
+.text-center {
+    text-align: center;
+}
