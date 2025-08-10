@@ -1,8 +1,13 @@
-{%extends 'base.html'%}
-{%block content%}
-{%for i in data%}
-<a href="{%url 'detail' i.id%}">{{i.title}}</a>
-<a href="{%url 'update' i.id%}"><li>update</li></a>
-<a href="{%url 'delete' i.id%}"><li>delete</li></a>
-{%endfor%}
-{%endblock content%}
+{% extends 'base.html' %}
+{% block content %}
+<div class="article-list">
+  {% for i in data %}
+    <div class="article-item">
+      <a href="{% url 'detail' i.slug %}"><h2>{{ i.title }}</h2></a>
+      <p>{{ i.description|truncatewords:25 }}</p>
+      <a href="{% url 'update' i.slug %}">Update</a> |
+      <a href="{% url 'delete' i.slug %}">Delete</a>
+    </div>
+  {% endfor %}
+</div>
+{% endblock content %}

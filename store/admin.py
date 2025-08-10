@@ -14,3 +14,6 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_display = ['name', 'slug']
     search_fields = ['name']
+
+
+# did this to customise and give it more features and make it more user-friendly

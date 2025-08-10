@@ -1,22 +1,40 @@
-from django.shortcuts import render, get_object_or_404
+from django.views.generic import TemplateView, ListView, DetailView
 from .models import Sticker, Category
-# Create your views here.
-def home(request):
-    return render(request, 'home.html')
 
-def sticker_list(request):
-    stickers = Sticker.objects.filter(is_active=True)
-    return render(request, 'store/sticker_list.html', {'stickers': stickers})
+class HomeView(TemplateView):
+    template_name = "home.html"
 
-def sticker_detail(request, slug):
-    sticker = get_object_or_404(Sticker, slug=slug, is_active=True)
-    return render(request, 'store/sticker_detail.html', {'sticker': sticker})
+class StickerListView(ListView):
+    model = Sticker
+    template_name = "store/sticker_list.html"
+    context_object_name = "stickers"
 
-def category_list(request):
-    categories = Category.objects.all()
-    return render(request, 'store/category_list.html', {'categories': categories})
+    def get_queryset(self):
+        return Sticker.objects.filter(is_active=True)
 
-def category_detail(request, slug):
-    category = get_object_or_404(Category, slug=slug)
-    stickers = Sticker.objects.filter(category=category, is_active=True)
-    return render(request, 'store/category_detail.html', {'category': category, 'stickers': stickers})
+class StickerDetailView(DetailView):
+    model = Sticker
+    template_name = "store/sticker_detail.html"
+    context_object_name = "sticker"
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
+
+    def get_queryset(self):
+        return Sticker.objects.filter(is_active=True)
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = "store/category_list.html"
+    context_object_name = "categories"
+
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = "store/category_detail.html"
+    context_object_name = "category"
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['stickers'] = Sticker.objects.filter(category=self.object, is_active=True)
+        return context

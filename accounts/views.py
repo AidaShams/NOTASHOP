@@ -11,6 +11,6 @@ class UserRegister(CreateView):
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
+        self.object = form.save()
+        login(self.request, self.object)
         return redirect(self.get_success_url())

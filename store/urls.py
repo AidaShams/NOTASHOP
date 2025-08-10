@@ -1,9 +1,16 @@
 from django.urls import path
-from . import views
+from .views import HomeView, StickerListView, StickerDetailView, CategoryListView, CategoryDetailView
 
 urlpatterns = [
-    path('', views.sticker_list, name='sticker_list'),                      # /store/
-    path('sticker/<slug:slug>/', views.sticker_detail, name='sticker_detail'), # /store/sticker/good-omens/
-    path('categories/', views.category_list, name='category_list'),         # /store/categories/
-    path('category/<slug:slug>/', views.category_detail, name='category_detail'), # /store/category/cute-stickers/
+    path('', HomeView.as_view(), name='home'),
+    path('stickers/', StickerListView.as_view(), name='sticker_list'),
+    path('stickers/<slug:slug>/', StickerDetailView.as_view(), name='sticker_detail'),
+    path('categories/', CategoryListView.as_view(), name='category_list'),
+    path('categories/<slug:slug>/', CategoryDetailView.as_view(), name='category_detail'),
 ]
+
+
+#did the path with slugs instead of int:pk (making it more user-friendly)
+
+#TODO: make article app and import the views from there
+# i mean create/delete/detail/update
