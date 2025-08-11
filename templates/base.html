@@ -49,8 +49,13 @@
         </button>
 
         <nav id="dropdown-menu" class="dropdown-menu" aria-hidden="true">
-            <a href="{% url 'sticker_list' %}">Stickers</a>
-            <a href="{% url 'category_list' %}">Categories</a>
+            <a href="{% url 'sticker_list' %}">All Stickers</a>
+
+            {% for category in categories %}
+                <a href="{% url 'category_detail' category.slug %}">{{ category.name }}</a>
+            {% endfor %}
+
+            <a href="{% url 'list' %}">Articles</a>
         </nav>
     </div>
 </header>

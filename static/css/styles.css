@@ -80,6 +80,10 @@ header {
     gap: 1rem;
 }
 
+.header-right {
+    position: relative;
+}
+
 .home-button {
     display: flex;
     align-items: center;
@@ -121,11 +125,6 @@ header {
     padding-right: 0.8rem;
 }
 
-/* Header right side */
-.header-right {
-    position: relative;
-}
-
 /* Hamburger button */
 #menu-toggle {
     background: none;
@@ -137,6 +136,7 @@ header {
 }
 
 /* Dropdown menu */
+/* hide by default */
 .dropdown-menu {
     position: absolute;
     right: 0;
@@ -168,7 +168,9 @@ header {
     color: white;
 }
 
-.dropdown-menu.active {
+/* Show menu when button or menu is focused/hovered */
+.header-right:hover .dropdown-menu,
+.header-right:focus-within .dropdown-menu {
     display: flex;
 }
 
