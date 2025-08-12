@@ -1,15 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&family=Poppins:wght@400;600&display=swap');
 
 /* ======== Base Styling ======== */
-body {
-    font-family: 'Poppins', sans-serif;
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
     color: #2c2c2c;
     background: linear-gradient(145deg, #fffaf0, #f0fff5);
     background-image: radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 0);
     background-size: 24px 24px;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /* ======== Typography & Links ======== */
@@ -34,61 +41,61 @@ h1, h2, h3 {
     color: #1a1a1a;
 }
 
-/* ======== Logo Container (centered absolutely in header) ======== */
+/* ======== Header Layout ======== */
+header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr; /* left - center - right */
+    align-items: center;
+    height: 120px;
+    padding: 0 2rem;
+    background: #ffffff;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Left menu (home + auth buttons) */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: flex-start;
+}
+
+/* Center logo */
 .logo-container {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    padding: 0;
-    width: auto;
-    text-align: center;
-    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .logo {
-    height: 100px;    /* adjust size as needed */
+    height: 100px;
     width: auto;
     object-fit: contain;
     filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.1));
     transition: filter 0.3s ease;
     cursor: pointer;
-    margin: 0 auto;
 }
 
 .logo:hover {
     filter: drop-shadow(2px 2px 6px rgba(214, 69, 80, 0.4));
 }
 
-/* ======== Header & Navigation ======== */
-header {
-    position: relative; /* make absolute children relative to this */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background: #ffffff;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-    top: 0;
-    z-index: 1000;
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
+/* Right menu (nav) */
 .header-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     position: relative;
 }
 
+/* ======== Navigation & Buttons ======== */
 .home-button {
     display: flex;
     align-items: center;
     color: #2c2c2c;
-    text-decoration: none;
     transition: color 0.3s ease;
 }
 
@@ -111,7 +118,6 @@ header {
     font-weight: 600;
     box-shadow: 0 4px 12px rgba(255, 111, 97, 0.25);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
 }
 
 .auth-nav a.btn:hover {
@@ -125,7 +131,7 @@ header {
     padding-right: 0.8rem;
 }
 
-/* Hamburger button */
+/* Hamburger */
 #menu-toggle {
     background: none;
     border: none;
@@ -135,8 +141,7 @@ header {
     align-items: center;
 }
 
-/* Dropdown menu */
-/* hide by default */
+/* Dropdown */
 .dropdown-menu {
     position: absolute;
     right: 0;
@@ -152,7 +157,6 @@ header {
 
 .dropdown-menu a {
     padding: 0.8rem 1rem;
-    text-decoration: none;
     color: #2c2c2c;
     font-weight: 600;
     border-bottom: 1px solid #eee;
@@ -168,13 +172,12 @@ header {
     color: white;
 }
 
-/* Show menu when button or menu is focused/hovered */
 .header-right:hover .dropdown-menu,
 .header-right:focus-within .dropdown-menu {
     display: flex;
 }
 
-/* ======== Main Content ======== */
+/* ======== Main ======== */
 main {
     max-width: 1000px;
     margin: 3rem auto;
@@ -183,10 +186,10 @@ main {
     border-radius: 20px;
     position: relative;
     z-index: 1;
-    box-shadow:
-        0 0 0 6px transparent,
-        0 0 0 12px #fff,
-        0 0 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 6px transparent,
+    0 0 0 12px #fff,
+    0 0 20px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
 }
 
 main::before {
@@ -197,16 +200,14 @@ main::before {
     right: -4px;
     bottom: -4px;
     z-index: -1;
-    background: linear-gradient(
-        135deg,
-        #ff6f61,
-        #f39c12,
-        #f1c40f,
-        #2ecc71,
-        #3498db,
-        #9b59b6,
-        #ff6f61
-    );
+    background: linear-gradient(135deg,
+            #ff6f61,
+            #f39c12,
+            #f1c40f,
+            #2ecc71,
+            #3498db,
+            #9b59b6,
+            #ff6f61);
     border-radius: 24px;
     background-size: 300% 300%;
     animation: rainbowFlow 30s ease infinite;
@@ -298,9 +299,7 @@ footer {
 }
 
 /* ======== Utilities ======== */
-.text-center {
-    text-align: center;
-}
+.text-center { text-align: center; }
 
 /* ======== Article Styling ======== */
 .article-list {
@@ -349,18 +348,14 @@ footer {
     color: #ff6f61;
 }
 
-.article-detail {
-  margin-bottom: 2rem;
-}
+.article-detail { margin-bottom: 2rem; }
 
-.comments-section {
-  margin-bottom: 2rem;
-}
+.comments-section { margin-bottom: 2rem; }
 
 .comment {
-  background: #f9f9f9;
-  padding: 1rem;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
