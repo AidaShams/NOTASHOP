@@ -5,8 +5,10 @@
     <div class="article-item">
       <a href="{% url 'detail' i.slug %}"><h2>{{ i.title }}</h2></a>
       <p>{{ i.description|truncatewords:25 }}</p>
-      <a href="{% url 'update' i.slug %}">Update</a> |
-      <a href="{% url 'delete' i.slug %}">Delete</a>
+      {% if user.is_superuser %}
+        <a href="{% url 'update' i.slug %}">Update</a> |
+        <a href="{% url 'delete' i.slug %}">Delete</a>
+      {% endif %}
     </div>
   {% endfor %}
 </div>

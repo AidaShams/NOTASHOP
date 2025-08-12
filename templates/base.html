@@ -56,6 +56,14 @@
             {% endfor %}
 
             <a href="{% url 'list' %}">Articles</a>
+
+            {% if user.is_superuser %}
+                <a href="{% url 'create' %}">Create Article</a>
+            {% endif %}
+
+            {% if user.is_superuser %}
+                <a href="{% url 'sticker_create' %}">Create Sticker</a>
+            {% endif %}
         </nav>
     </div>
 </header>
