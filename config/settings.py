@@ -65,6 +65,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'store.context_processors.categories_processor',
+                'store.context_processors.cart',
             ],
         },
     },
@@ -132,3 +133,4 @@ MEDIA_ROOT = [str(BASE_DIR.joinpath('media'))]
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+CART_SESSION_ID = 'cart'

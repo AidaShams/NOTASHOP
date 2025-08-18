@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Your Cart - Notashop{% endblock %}
+
+{% block content %}
+    <div class="cart-container">
+        <h2 class="text-center">Your Cart</h2>
+
+        {% if cart %}
+            {% for item in cart %}
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <span class="cart-item-name">{{ item.sticker.name }}</span>
+                        <span class="cart-item-price">Price: {{ item.price }} $</span>
+                        <span class="cart-item-price">Total: {{ item.total_price }} $</span>
+                    </div>
+
+                    <div class="cart-actions">
+                        <form action="{% url 'cart_add' item.sticker.id %}" method="post" class="cart-update-form">
+                            {% csrf_token %}
+                            {{ item.update_quantity_form.quantity }}
+                            {{ item.update_quantity_form.update }}
+                            <button type="submit" class="btn">Update</button>
+                        </form>
+
+                        <form action="{% url 'cart_remove' item.sticker.id %}" method="post" class="cart-remove-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn remove-btn">Remove</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="cart-total">
+                Cart Total: {{ cart.get_total_price }} $
+            </div>
+
+            <div class="text-center" style="margin-top:1rem;">
+                <a href="{% url 'sticker_list' %}" class="btn">Continue Shopping</a>
+            </div>
+
+        {% else %}
+            <p class="text-center">Your cart is empty.</p>
+        {% endif %}
+    </div>
+{% endblock %}

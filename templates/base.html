@@ -41,6 +41,10 @@
     </div>
 
     <div class="header-right">
+        <a href="{% url 'cart_detail' %}" class="cart-link">
+            🛒 Cart (<span id="cart-count">{{ cart|length }}</span>)
+        </a>
+
         <button id="menu-toggle" aria-label="Toggle menu">
             <svg xmlns="http://www.w3.org/2000/svg" fill="#2c2c2c" viewBox="0 0 24 24" width="28" height="28"
                  aria-hidden="true">
@@ -59,9 +63,6 @@
 
             {% if user.is_superuser %}
                 <a href="{% url 'create' %}">Create Article</a>
-            {% endif %}
-
-            {% if user.is_superuser %}
                 <a href="{% url 'sticker_create' %}">Create Sticker</a>
             {% endif %}
         </nav>
@@ -69,15 +70,54 @@
 </header>
 
 <main>
-    <div class="card">
         {% block content %}
         {% endblock %}
-    </div>
 </main>
 
 <footer>
     &copy; 2025 Nota Shop — All Rights Reserved
 </footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    {#add to cart#}
+    document.querySelectorAll(".add-to-cart-form").forEach(form => {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            fetch(this.action, {
+                method: "POST",
+                body: new FormData(this),
+                headers: {"X-Requested-With": "XMLHttpRequest"}
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.querySelector("#cart-count").textContent = data.cart_count;
+            });
+        });
+    });
+
+    {#update/remove in cart#}
+    document.querySelectorAll(".cart-update-form, .cart-remove-form").forEach(form => {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            fetch(this.action, {
+                method: "POST",
+                body: new FormData(this),
+                headers: {"X-Requested-With": "XMLHttpRequest"}
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.querySelector("#cart-count").textContent = data.cart_count;
+
+                // Replace the cart HTML (cart_detail.html should return partial HTML if AJAX)
+                if (data.cart_html) {
+                    document.querySelector("main").innerHTML = data.cart_html;
+                }
+            });
+        });
+    });
+});
+</script>
 
 </body>
 </html>

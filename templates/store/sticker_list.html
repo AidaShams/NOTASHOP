@@ -4,18 +4,30 @@
 {% block title %}All Stickers - Notashop{% endblock %}
 
 {% block content %}
-    <h2>All Stickers</h2>
-    <ul>
-        {% for sticker in stickers %}
-            <li>
-                <a href="{% url 'sticker_detail' sticker.slug %}">
-                    {{ sticker.name }} - {{ sticker.price }}$
-                </a>
-            </li>
-        {% empty %}
-            <li>No stickers available.</li>
-        {% endfor %}
-    </ul>
-{% endblock %}
+  <h2 class="text-center">All Stickers</h2>
 
-<h2>All Stickers</h2>
+  <div class="products">
+    {% for sticker in stickers %}
+      <div class="product-card">
+        <a href="{% url 'sticker_detail' sticker.slug %}">
+          {% if sticker.image %}
+            <img src="{{ sticker.image.url }}" alt="{{ sticker.name }}">
+          {% else %}
+            <img src="{% static 'images/placeholder.png' %}" alt="{{ sticker.name }}">
+          {% endif %}
+        </a>
+        <h3>{{ sticker.name }}</h3>
+        <p>{{ sticker.price }} $</p>
+
+        <form action="{% url 'cart_add' sticker.id %}" method="post" class="cart-add-form">
+          {% csrf_token %}
+          <input type="hidden" name="quantity" value="1">
+          <input type="hidden" name="update" value="False">
+          <button type="submit" class="btn add-to-cart">Add to Cart</button>
+        </form>
+      </div>
+    {% empty %}
+      <p class="text-center">No stickers available.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

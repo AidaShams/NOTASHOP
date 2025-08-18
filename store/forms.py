@@ -7,3 +7,7 @@ class StickerForm(forms.ModelForm):
         fields = [
             'name', 'description', 'price', 'tags', 'stock', 'is_active', 'category'
         ]
+
+class CartAddForm(forms.Form):
+    quantity = forms.IntegerField(min_value=1, initial=1)
+    update = forms.BooleanField(required=False, initial=False, widget=forms.HiddenInput)

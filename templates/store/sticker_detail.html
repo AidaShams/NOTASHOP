@@ -9,6 +9,13 @@
     <p><strong>Category:</strong> {{ sticker.category.name }}</p>
     <p>{{ sticker.description }}</p>
 
+    <form action="{% url 'cart_add' sticker.id %}" method="post">
+        {% csrf_token %}
+        {{ cart_form.quantity }}
+        {{ cart_form.update }}
+        <button type="submit">Add to Cart</button>
+    </form>
+
     {% if sticker.image %}
         <img src="{{ sticker.image.url }}" alt="{{ sticker.name }}" width="300">
     {% endif %}
