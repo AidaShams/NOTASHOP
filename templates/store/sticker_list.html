@@ -4,30 +4,44 @@
 {% block title %}All Stickers - Notashop{% endblock %}
 
 {% block content %}
-  <h2 class="text-center">All Stickers</h2>
+    <h2 class="text-center">All Stickers</h2>
 
-  <div class="products">
-    {% for sticker in stickers %}
-      <div class="product-card">
-        <a href="{% url 'sticker_detail' sticker.slug %}">
-          {% if sticker.image %}
-            <img src="{{ sticker.image.url }}" alt="{{ sticker.name }}">
-          {% else %}
-            <img src="{% static 'images/placeholder.png' %}" alt="{{ sticker.name }}">
-          {% endif %}
-        </a>
-        <h3>{{ sticker.name }}</h3>
-        <p>{{ sticker.price }} $</p>
+    <div class="products">
+        {% for sticker in stickers %}
+            <div class="product-card">
+                <a href="{% url 'sticker_detail' sticker.slug %}">
+                    {% if sticker.image %}
+                        <img src="{{ sticker.image.url }}" alt="{{ sticker.name }}">
+                    {% else %}
+                        <img src="{% static 'images/placeholder.png' %}" alt="{{ sticker.name }}">
+                    {% endif %}
+                </a>
+                <h3>{{ sticker.name }}</h3>
+                <p>{{ sticker.price }} $</p>
 
-        <form action="{% url 'cart_add' sticker.id %}" method="post" class="cart-add-form">
-          {% csrf_token %}
-          <input type="hidden" name="quantity" value="1">
-          <input type="hidden" name="update" value="False">
-          <button type="submit" class="btn add-to-cart">Add to Cart</button>
-        </form>
-      </div>
-    {% empty %}
-      <p class="text-center">No stickers available.</p>
-    {% endfor %}
-  </div>
+                <div class="sticker-actions">
+                    <form action="{% url 'cart_decrement' sticker.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">-</button>
+                    </form>
+
+                    <span class="quantity">{{ sticker.cart_quantity }}</span>
+
+                    <form action="{% url 'cart_add' sticker.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="1">
+                        <input type="hidden" name="update" value="False">
+                        <button type="submit" class="btn">+</button>
+                    </form>
+
+                    <form action="{% url 'cart_remove' sticker.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn remove-btn">🗑️</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">No stickers available.</p>
+        {% endfor %}
+    </div>
 {% endblock %}

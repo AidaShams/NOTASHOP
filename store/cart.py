@@ -30,14 +30,26 @@ class Cart:
             del self.cart[sticker_id]
             self.save()
 
-    def __iter__(self):
+    def decrement(self, sticker):
+        sticker_id = str(sticker.id)
+        if sticker_id in self.cart:
+            self.cart[sticker_id]['quantity'] -= 1
+            if self.cart[sticker_id]['quantity'] <= 0:
+                self.remove(sticker)
+            else:
+                self.save()
+
+    def __iter__(self):     #iter makes a copy of the item
         sticker_ids = self.cart.keys()
         stickers = Sticker.objects.filter(id__in=sticker_ids)
+
         for sticker in stickers:
-            item = self.cart[str(sticker.id)]
-            item['sticker'] = sticker
-            item['total_price'] = Decimal(item['price']) * item['quantity']
-            yield item
+            cart_item = self.cart[str(sticker.id)]
+            cart_item_copy = cart_item.copy()
+            cart_item_copy['sticker'] = sticker
+            cart_item_copy['price'] = Decimal(cart_item['price'])
+            cart_item_copy['total_price'] = cart_item_copy['price'] * cart_item_copy['quantity']
+            yield cart_item_copy
 
     def __len__(self):
         return sum(item['quantity'] for item in self.cart.values())

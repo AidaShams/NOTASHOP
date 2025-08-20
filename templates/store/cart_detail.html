@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Your Cart - Notashop{% endblock %}
+{% block title %}Your Cart{% endblock %}
 
 {% block content %}
     <div class="cart-container">
@@ -14,26 +14,32 @@
                         <span class="cart-item-name">{{ item.sticker.name }}</span>
                         <span class="cart-item-price">Price: {{ item.price }} $</span>
                         <span class="cart-item-price">Total: {{ item.total_price }} $</span>
+                        <span class="cart-item-quantity">Quantity: {{ item.quantity }}</span>
                     </div>
 
                     <div class="cart-actions">
-                        <form action="{% url 'cart_add' item.sticker.id %}" method="post" class="cart-update-form">
+                        <form action="{% url 'cart_decrement' item.sticker.id %}" method="post" style="display:inline;">
                             {% csrf_token %}
-                            {{ item.update_quantity_form.quantity }}
-                            {{ item.update_quantity_form.update }}
-                            <button type="submit" class="btn">Update</button>
+                            <button type="submit" class="btn">-</button>
                         </form>
 
-                        <form action="{% url 'cart_remove' item.sticker.id %}" method="post" class="cart-remove-form">
+                        <form action="{% url 'cart_add' item.sticker.id %}" method="post" style="display:inline;">
                             {% csrf_token %}
-                            <button type="submit" class="btn remove-btn">Remove</button>
+                            <input type="hidden" name="quantity" value="1">
+                            <input type="hidden" name="update" value="False">
+                            <button type="submit" class="btn">+</button>
+                        </form>
+
+                        <form action="{% url 'cart_remove' item.sticker.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn remove-btn">🗑️</button>
                         </form>
                     </div>
                 </div>
             {% endfor %}
 
             <div class="cart-total">
-                Cart Total: {{ cart.get_total_price }} $
+                <strong>Cart Total: {{ cart.get_total_price }} $</strong>
             </div>
 
             <div class="text-center" style="margin-top:1rem;">
