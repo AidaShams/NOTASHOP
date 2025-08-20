@@ -128,7 +128,7 @@ LOGOUT_REDIRECT_URL = 'login'
 AUTH_USER_MODEL = 'accounts.CustomUserRegistration'
 # for adding images:
 MEDIA_URL = '/media/'
-MEDIA_ROOT = [str(BASE_DIR.joinpath('media'))]
+MEDIA_ROOT = BASE_DIR / 'media'
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

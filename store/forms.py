@@ -5,7 +5,7 @@ class StickerForm(forms.ModelForm):
     class Meta:
         model = Sticker
         fields = [
-            'name', 'description', 'price', 'tags', 'stock', 'is_active', 'category'
+            'name', 'description', 'price', 'image', 'tags', 'stock', 'is_active', 'category'
         ]
 
 class CartAddForm(forms.Form):

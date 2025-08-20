@@ -133,7 +133,7 @@ def cart_detail(request):
 @user_passes_test(lambda u: u.is_superuser)
 def sticker_create(request):
     if request.method == 'POST':
-        form = StickerForm(request.POST)
+        form = StickerForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('sticker_list')

@@ -19,7 +19,7 @@ class Sticker(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    # image = models.ImageField(upload_to='stickers/')
+    image = models.ImageField(upload_to='stickers/', blank=True, null=True)
     # thumbnail = models.ImageField(upload_to='stickers/thumbnails/', blank=True, null=True)
     tags = models.CharField(max_length=250, blank=True)
     stock = models.PositiveIntegerField(default=0)

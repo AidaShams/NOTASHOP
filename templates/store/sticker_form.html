@@ -2,9 +2,28 @@
 
 {% block content %}
 <h1>Create Sticker</h1>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Save Sticker</button>
 </form>
+
+{# optional: show preview after choosing image #}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.querySelector('input[type="file"]');
+    if (input) {
+        input.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                img.style.maxWidth = "200px";
+                img.style.marginTop = "10px";
+                input.parentNode.appendChild(img);
+            }
+        });
+    }
+});
+</script>
 {% endblock %}
