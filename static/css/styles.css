@@ -79,7 +79,6 @@ header {
     justify-content: flex-start;
 }
 
-/* Center logo */
 .logo-container {
     display: flex;
     justify-content: center;
@@ -99,7 +98,6 @@ header {
     filter: drop-shadow(2px 2px 6px rgba(214, 69, 80, 0.4));
 }
 
-/* Right menu (nav) */
 .header-right {
     display: flex;
     justify-content: flex-end;
@@ -147,7 +145,6 @@ header {
     padding-right: 0.8rem;
 }
 
-/* Hamburger */
 #menu-toggle {
     background: none;
     border: none;
@@ -157,7 +154,6 @@ header {
     align-items: center;
 }
 
-/* Dropdown */
 .dropdown-menu {
     position: absolute;
     right: 0;
@@ -230,7 +226,7 @@ button:hover, .btn:hover {
 /* ======== Product Grid: 3 stickers per row ======== */
 .products {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 per row */
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     margin-top: 3rem;
 }
@@ -238,13 +234,13 @@ button:hover, .btn:hover {
 /* Responsive adjustments */
 @media (max-width: 900px) {
     .products {
-        grid-template-columns: repeat(2, 1fr); /* 2 per row on smaller screens */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 600px) {
     .products {
-        grid-template-columns: 1fr; /* 1 per row on mobile */
+        grid-template-columns: 1fr;
     }
 }
 
@@ -272,6 +268,59 @@ button:hover, .btn:hover {
 .product-card:hover img {
     transform: scale(1.08);
 }
+
+/* ======== Cart & Checkout Layout ======== */
+.cart-container .products,
+.checkout-container .products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.sticker-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.8rem;
+}
+
+.sticker-actions form {
+    display: inline-block;
+    margin: 0;
+}
+
+.sticker-actions .quantity {
+    margin: 0 0.5rem;
+    font-weight: 600;
+}
+
+.sticker-actions .remove-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+}
+
+/* ======== Checkout Specific ======== */
+.checkout-container h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.checkout-container p {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.checkout-container .product-card {
+    cursor: default;
+}
+
+.checkout-container .sticker-actions {
+    display: none;
+}
+
+/* hide + - trash on checkout */
 
 /* ======== Cart Popup ======== */
 .cart-popup {
@@ -305,43 +354,4 @@ footer {
     backdrop-filter: blur(8px);
     margin-top: 4rem;
     border-radius: 20px 20px 0 0;
-}
-/* Stickers page layout fix */
-.stickers-page main {
-    max-width: 100%;
-    padding: 2rem;
-    background: transparent;
-    box-shadow: none;
-}
-
-/* Cart item layout like sticker list */
-.cart-container .products {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-/* Sticker actions row */
-.sticker-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 0.8rem;
-}
-
-.sticker-actions form {
-    display: inline-block;
-    margin: 0;
-}
-
-.sticker-actions .quantity {
-    margin: 0 0.5rem;
-    font-weight: 600;
-}
-
-/* Ensure trash button is smaller like the others */
-.sticker-actions .remove-btn {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.9rem;
 }

@@ -4,54 +4,60 @@
 {% block title %}Your Cart{% endblock %}
 
 {% block content %}
-<div class="cart-container">
-    <h2 class="text-center">Your Cart</h2>
+    <div class="cart-container">
+        <h2 class="text-center">Your Cart</h2>
 
-    {% if cart %}
-        <div class="products">  <!-- use same grid as sticker list -->
-            {% for item in cart %}
-                <div class="product-card" data-sticker-id="{{ item.sticker.id }}">
-                    <img src="{{ item.sticker.image.url }}" alt="{{ item.sticker.name }}">  <!-- show image -->
-                    <div class="cart-item-info">
-                        <span class="cart-item-name">{{ item.sticker.name }}</span>
-                        <span class="cart-item-price">Price: {{ item.price }} $</span>
-                        <span class="cart-item-price">Total: {{ item.total_price }} $</span>
+        {% if cart %}
+            <div class="products">  <!-- use same grid as sticker list -->
+                {% for item in cart %}
+                    <div class="product-card" data-sticker-id="{{ item.sticker.id }}">
+                        <img src="{{ item.sticker.image.url }}" alt="{{ item.sticker.name }}">  <!-- show image -->
+                        <div class="cart-item-info">
+                            <span class="cart-item-name">{{ item.sticker.name }}</span>
+                            <span class="cart-item-price">Price: {{ item.price }} $</span>
+                            <span class="cart-item-price">Total: {{ item.total_price }} $</span>
+                        </div>
+
+                        <div class="sticker-actions">
+                            <form class="cart-decrement" action="{% url 'cart_decrement' item.sticker.id %}"
+                                  method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn">-</button>
+                            </form>
+
+                            <span class="quantity">{{ item.quantity }}</span>
+
+                            <form class="add-to-cart-form" action="{% url 'cart_add' item.sticker.id %}" method="post"
+                                  data-sticker-id="{{ item.sticker.id }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1">
+                                <input type="hidden" name="update" value="False">
+                                <button type="submit" class="btn">+</button>
+                            </form>
+
+                            <form class="cart-remove" action="{% url 'cart_remove' item.sticker.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn remove-btn">🗑️</button>
+                            </form>
+                        </div>
                     </div>
+                {% endfor %}
+            </div>
 
-                    <div class="sticker-actions">
-                        <form class="cart-decrement" action="{% url 'cart_decrement' item.sticker.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn">-</button>
-                        </form>
+            <div class="cart-total text-center">
+                <strong>Cart Total: {{ cart.get_total_price }} $</strong>
+            </div>
 
-                        <span class="quantity">{{ item.quantity }}</span>
+            <div class="text-center" style="margin-top:1rem;">
+                <a href="{% url 'checkout' %}" class="btn">Checkout</a>
+            </div>
 
-                        <form class="add-to-cart-form" action="{% url 'cart_add' item.sticker.id %}" method="post" data-sticker-id="{{ item.sticker.id }}">
-                            {% csrf_token %}
-                            <input type="hidden" name="quantity" value="1">
-                            <input type="hidden" name="update" value="False">
-                            <button type="submit" class="btn">+</button>
-                        </form>
+            <div class="text-center" style="margin-top:1rem;">
+                <a href="{% url 'sticker_list' %}" class="btn">Continue Shopping</a>
+            </div>
 
-                        <form class="cart-remove" action="{% url 'cart_remove' item.sticker.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn remove-btn">🗑️</button>
-                        </form>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="cart-total text-center">
-            <strong>Cart Total: {{ cart.get_total_price }} $</strong>
-        </div>
-
-        <div class="text-center" style="margin-top:1rem;">
-            <a href="{% url 'sticker_list' %}" class="btn">Continue Shopping</a>
-        </div>
-
-    {% else %}
-        <p class="text-center">Your cart is empty.</p>
-    {% endif %}
-</div>
+        {% else %}
+            <p class="text-center">Your cart is empty.</p>
+        {% endif %}
+    </div>
 {% endblock %}

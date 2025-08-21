@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="cart-container">
+    <h2 class="text-center">Thank You for Your Purchase!</h2>
+    <p class="text-center">Your total was: <strong>{{ total_price }} $</strong></p>
+
+    {% if items %}
+        <div class="products">
+            {% for item in items %}
+                <div class="product-card">
+                    <img src="{{ item.sticker.image.url }}" alt="{{ item.sticker.name }}">
+                    <div class="cart-item-info">
+                        <span class="cart-item-name">{{ item.sticker.name }}</span>
+                        <span class="cart-item-price">Quantity: {{ item.quantity }}</span>
+                        <span class="cart-item-price">Subtotal: {{ item.total_price }} $</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="text-center" style="margin-top:1rem;">
+        <a href="{% url 'sticker_list' %}" class="btn">Continue Shopping</a>
+    </div>
+</div>
+{% endblock %}

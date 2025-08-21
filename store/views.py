@@ -129,6 +129,14 @@ def cart_detail(request):
     return render(request, 'store/cart_detail.html', {'cart': cart})
 
 
+def checkout(request):
+    cart = Cart(request)
+    total_price = cart.get_total_price()
+    items = list(cart)
+    cart.clear()
+    return render(request, 'store/checkout.html', {'total_price': total_price, 'items': items})
+
+
 # only admin can see create sticker menu
 @user_passes_test(lambda u: u.is_superuser)
 def sticker_create(request):
