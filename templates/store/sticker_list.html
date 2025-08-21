@@ -4,11 +4,12 @@
 {% block title %}All Stickers - Notashop{% endblock %}
 
 {% block content %}
+<div class="stickers-page">
     <h2 class="text-center">All Stickers</h2>
 
     <div class="products">
         {% for sticker in stickers %}
-            <div class="product-card">
+            <div class="product-card" data-sticker-id="{{ sticker.id }}">
                 <a href="{% url 'sticker_detail' sticker.slug %}">
                     {% if sticker.image %}
                         <img src="{{ sticker.image.url }}" alt="{{ sticker.name }}">
@@ -20,21 +21,22 @@
                 <p>{{ sticker.price }} $</p>
 
                 <div class="sticker-actions">
-                    <form action="{% url 'cart_decrement' sticker.id %}" method="post" style="display:inline;">
+                    <form class="cart-decrement" action="{% url 'cart_decrement' sticker.id %}" method="post">
                         {% csrf_token %}
                         <button type="submit" class="btn">-</button>
                     </form>
 
                     <span class="quantity">{{ sticker.cart_quantity }}</span>
 
-                    <form action="{% url 'cart_add' sticker.id %}" method="post" style="display:inline;">
+                    <form class="add-to-cart-form" action="{% url 'cart_add' sticker.id %}" method="post"
+                          data-sticker-id="{{ sticker.id }}">
                         {% csrf_token %}
                         <input type="hidden" name="quantity" value="1">
                         <input type="hidden" name="update" value="False">
                         <button type="submit" class="btn">+</button>
                     </form>
 
-                    <form action="{% url 'cart_remove' sticker.id %}" method="post" style="display:inline;">
+                    <form class="cart-remove" action="{% url 'cart_remove' sticker.id %}" method="post">
                         {% csrf_token %}
                         <button type="submit" class="btn remove-btn">🗑️</button>
                     </form>
@@ -44,4 +46,5 @@
             <p class="text-center">No stickers available.</p>
         {% endfor %}
     </div>
+</div>
 {% endblock %}

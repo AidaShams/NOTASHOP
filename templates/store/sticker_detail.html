@@ -4,21 +4,38 @@
 {% block title %}{{ sticker.name }} - Notashop{% endblock %}
 
 {% block content %}
-    <h2>{{ sticker.name }}</h2>
-    <p><strong>Price:</strong> {{ sticker.price }}$</p>
+    <h2 class="text-center">{{ sticker.name }}</h2>
+    <p><strong>Price:</strong> {{ sticker.price }} $</p>
     <p><strong>Category:</strong> {{ sticker.category.name }}</p>
     <p>{{ sticker.description }}</p>
 
-    <form action="{% url 'cart_add' sticker.id %}" method="post">
-        {% csrf_token %}
-        {{ cart_form.quantity }}
-        {{ cart_form.update }}
-        <button type="submit">Add to Cart</button>
-    </form>
+    <div class="product-card" data-sticker-id="{{ sticker.id }}">
+        {% if sticker.image %}
+            <img src="{{ sticker.image.url }}" alt="{{ sticker.name }}" width="300">
+        {% endif %}
 
-    {% if sticker.image %}
-        <img src="{{ sticker.image.url }}" alt="{{ sticker.name }}" width="300">
-    {% endif %}
+        <div class="sticker-actions">
+            <form class="cart-decrement" action="{% url 'cart_decrement' sticker.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn">-</button>
+            </form>
 
-    <p><a href="{% url 'sticker_list' %}">Back to stickers</a></p>
+            <span class="quantity">{{ sticker.cart_quantity|default:"0" }}</span>
+
+            <form class="add-to-cart-form" action="{% url 'cart_add' sticker.id %}" method="post"
+                  data-sticker-id="{{ sticker.id }}">
+                {% csrf_token %}
+                <input type="hidden" name="quantity" value="1">
+                <input type="hidden" name="update" value="False">
+                <button type="submit" class="btn">+</button>
+            </form>
+
+            <form class="cart-remove" action="{% url 'cart_remove' sticker.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn remove-btn">🗑️</button>
+            </form>
+        </div>
+    </div>
+
+    <p class="text-center"><a href="{% url 'sticker_list' %}">⬅ Back to stickers</a></p>
 {% endblock %}

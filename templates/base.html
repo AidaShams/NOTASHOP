@@ -70,8 +70,8 @@
 </header>
 
 <main>
-        {% block content %}
-        {% endblock %}
+    {% block content %}
+    {% endblock %}
 </main>
 
 <footer>
@@ -79,44 +79,58 @@
 </footer>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    {#add to cart#}
-    document.querySelectorAll(".add-to-cart-form").forEach(form => {
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-            fetch(this.action, {
-                method: "POST",
-                body: new FormData(this),
-                headers: {"X-Requested-With": "XMLHttpRequest"}
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.querySelector("#cart-count").textContent = data.cart_count;
+    document.addEventListener("DOMContentLoaded", () => {
+        function updateCartDisplay(stickerId, quantity, cartCount) {
+            const card = document.querySelector(`.product-card[data-sticker-id='${stickerId}']`);
+            if (card) {
+                const qtySpan = card.querySelector(".quantity");
+                if (qtySpan) qtySpan.textContent = quantity;
+            }
+            const cartCountElem = document.querySelector("#cart-count");
+            if (cartCountElem) cartCountElem.textContent = cartCount;
+        }
+
+        function showCartPopup(message) {
+            const popup = document.createElement('div');
+            popup.className = 'cart-popup';
+            popup.textContent = message;
+            document.body.appendChild(popup);
+            setTimeout(() => popup.classList.add('show'), 50);
+            setTimeout(() => {
+                popup.classList.remove('show');
+                setTimeout(() => popup.remove(), 400);
+            }, 3000);
+        }
+
+        // Handle AJAX forms
+        document.querySelectorAll(".add-to-cart-form, .cart-decrement, .cart-remove").forEach(form => {
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const url = this.action;
+                const formData = new FormData(this);
+
+                fetch(url, {
+                    method: "POST",
+                    body: formData,
+                    headers: {"X-Requested-With": "XMLHttpRequest"}
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            const qty = data.quantity || 0;
+                            const cartCount = data.cart_count || 0;
+                            updateCartDisplay(data.sticker_id, qty, cartCount);
+
+                            if (this.classList.contains('add-to-cart-form')) {
+                                showCartPopup(`Added ${qty} item(s) to cart! Total items: ${cartCount}`);
+                            }
+                        }
+                    })
+                    .catch(err => console.error('Cart AJAX error:', err));
             });
         });
-    });
 
-    {#update/remove in cart#}
-    document.querySelectorAll(".cart-update-form, .cart-remove-form").forEach(form => {
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-            fetch(this.action, {
-                method: "POST",
-                body: new FormData(this),
-                headers: {"X-Requested-With": "XMLHttpRequest"}
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.querySelector("#cart-count").textContent = data.cart_count;
-
-                // Replace the cart HTML (cart_detail.html should return partial HTML if AJAX)
-                if (data.cart_html) {
-                    document.querySelector("main").innerHTML = data.cart_html;
-                }
-            });
-        });
     });
-});
 </script>
 
 </body>
