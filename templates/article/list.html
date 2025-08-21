@@ -1,15 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="article-list">
-  {% for i in data %}
-    <div class="article-item">
-      <a href="{% url 'detail' i.slug %}"><h2>{{ i.title }}</h2></a>
-      <p>{{ i.description|truncatewords:25 }}</p>
-      {% if user.is_superuser %}
-        <a href="{% url 'update' i.slug %}">Update</a> |
-        <a href="{% url 'delete' i.slug %}">Delete</a>
-      {% endif %}
+    <h1>All Articles</h1>
+
+    <div class="article-list">
+        {% for i in data %}
+            <div class="article-card">
+                <a href="{% url 'detail' i.slug %}"><h2>{{ i.title }}</h2></a>
+                <p>{{ i.description|truncatewords:25 }}</p>
+                <div class="meta">
+                    <span>By {{ i.author.username }}</span>
+                    <span>{{ i.publish_date|date:"M d, Y" }}</span>
+                </div>
+                {% if user.is_superuser %}
+                    <div class="admin-links">
+                        <a href="{% url 'update' i.slug %}">Update</a> |
+                        <a href="{% url 'delete' i.slug %}">Delete</a>
+                    </div>
+                {% endif %}
+                <a href="{% url 'detail' i.slug %}" class="read-more">Read More</a>
+            </div>
+        {% endfor %}
     </div>
-  {% endfor %}
-</div>
 {% endblock content %}

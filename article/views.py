@@ -1,9 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy, reverse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Article
+from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
+from django.contrib.auth.decorators import login_required, user_passes_test
+
 
 class ArticleListView(ListView):
     model = Article
@@ -21,7 +23,11 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = kwargs.get('form') or CommentForm()
-        context['comments'] = self.object.comments.filter(is_approved=True).order_by('created_at')
+
+        if self.request.user.is_superuser:
+            context['comments'] = self.object.comments.all().order_by('created_at')
+        else:
+            context['comments'] = self.object.comments.filter(is_approved=True).order_by('created_at')
         return context
 
     def post(self, request, *args, **kwargs):
@@ -31,6 +37,8 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
             comment = form.save(commit=False)
             comment.article = self.object
             comment.writer = request.user
+            if request.user.is_superuser:
+                comment.is_approved = True
             comment.save()
             return redirect(self.get_success_url())
         else:
@@ -41,7 +49,7 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
         return reverse('detail', kwargs={'slug': self.object.slug})
 
 
-class AdminRequiredMixin(UserPassesTestMixin):    #only superuser(admin) has access
+class AdminRequiredMixin(UserPassesTestMixin):  # only superuser(admin) has access
     def test_func(self):
         return self.request.user.is_superuser
 
@@ -68,3 +76,12 @@ class ArticleDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Article
     template_name = "article/delete.html"
     success_url = reverse_lazy('list')
+
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def approve_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    comment.is_approved = True
+    comment.save()
+    return redirect(comment.article.get_absolute_url())

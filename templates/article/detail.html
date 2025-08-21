@@ -1,34 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <article class="article-detail">
-    <h1>{{ article.title }}</h1>
-    <p><strong>By:</strong> {{ article.author.username }}</p>
-    <p>{{ article.description }}</p>
-  </article>
+    <article class="article-detail">
+        <h1>{{ article.title }}</h1>
+        <p><strong>By:</strong> {{ article.author.username }}</p>
+        <p>{{ article.description }}</p>
+    </article>
 
-  <section class="comments-section">
-    <h2>Comments</h2>
+    <section class="comments-section">
+        <h2>Comments</h2>
 
-    {% if article.comments.exists %}
-      {% for c in article.comments.all %}
-        <div class="comment">
-          <p><strong>{{ c.writer.username }}</strong> said:</p>
-          <p>{{ c.comment }}</p>
-          <hr>
-        </div>
-      {% endfor %}
-    {% else %}
-      <p>No comments yet. Be the first to comment!</p>
-    {% endif %}
-  </section>
+        {% if comments or user.is_superuser %}
+            {% for c in article.comments.all %}
+                {% if c.is_approved or user.is_superuser %}
+                    <div class="comment {% if not c.is_approved %}unapproved{% endif %}">
+                        <p><strong>{{ c.writer.username }}</strong> said:</p>
+                        <p>{{ c.comment }}</p>
 
-  <section class="comment-form">
-    <h3>Add a Comment</h3>
-    <form method="POST" action="">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="btn">Submit</button>
-    </form>
-  </section>
+                        {% if not c.is_approved and user.is_superuser %}
+                            <p><em>Unapproved comment</em></p>
+                            <form method="POST" action="{% url 'admin-approve-comment' c.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Approve</button>
+                            </form>
+                        {% endif %}
+                        <hr>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>No comments yet. Be the first to comment!</p>
+        {% endif %}
+    </section>
+
+    <section class="comment-form">
+        <h3>Add a Comment</h3>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </section>
 {% endblock content %}

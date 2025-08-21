@@ -20,7 +20,14 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            #unique slug
+            while Article.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -32,7 +39,7 @@ class Comment(models.Model):
     writer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=True) #i want the comments to be approved first
+    is_approved = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['created_at']
