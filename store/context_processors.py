@@ -7,5 +7,3 @@ def categories_processor(request):
 
 def cart(request):
     return {'cart': Cart(request)}
-
-# TODO: look up this code see what's wrong

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Purchase History{% endblock %}
+
+{% block content %}
+    <h2 class="text-center">My Purchase History</h2>
+
+    {% if orders %}
+        {% for order in orders %}
+            <div class="order-card">
+                <h3>Order #{{ order.id }} — {{ order.created_at|date:"M d, Y H:i" }}</h3>
+                <p>Total Paid: ${{ order.total_price }}</p>
+                <div class="order-items">
+                    {% for item in order.items.all %}
+                        <div class="product-card">
+                            {% if item.sticker.image %}
+                                <img src="{{ item.sticker.image.url }}" alt="{{ item.sticker.name }}">
+                            {% else %}
+                                <img src="{% static 'images/default-sticker.png' %}" alt="No Image">
+                            {% endif %}
+                            <div class="product-info">
+                                <h4>{{ item.sticker.name }}</h4>
+                                <p>Quantity: {{ item.quantity }}</p>
+                                <p>Price per Item: ${{ item.price }}</p>
+                                <p>Subtotal:
+                                    ${{ item.price|floatformat:2|add:'0.00'|floatformat:2|floatformat:""|add:item.quantity|floatformat:2 }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You have not made any purchases yet.</p>
+    {% endif %}
+{% endblock %}
+{#TODO:still needs some work#}

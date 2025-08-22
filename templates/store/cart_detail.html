@@ -8,10 +8,10 @@
         <h2 class="text-center">Your Cart</h2>
 
         {% if cart %}
-            <div class="products">  <!-- use same grid as sticker list -->
+            <div class="products">
                 {% for item in cart %}
                     <div class="product-card" data-sticker-id="{{ item.sticker.id }}">
-                        <img src="{{ item.sticker.image.url }}" alt="{{ item.sticker.name }}">  <!-- show image -->
+                        <img src="{{ item.sticker.image.url }}" alt="{{ item.sticker.name }}">
                         <div class="cart-item-info">
                             <span class="cart-item-name">{{ item.sticker.name }}</span>
                             <span class="cart-item-price">Price: {{ item.price }} $</span>
@@ -55,7 +55,6 @@
             <div class="text-center" style="margin-top:1rem;">
                 <a href="{% url 'sticker_list' %}" class="btn">Continue Shopping</a>
             </div>
-
         {% else %}
             <p class="text-center">Your cart is empty.</p>
         {% endif %}

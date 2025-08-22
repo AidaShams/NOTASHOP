@@ -1,5 +1,6 @@
 from django import forms
-from .models import Sticker, Profile
+from .models import Sticker
+from accounts.models import Profile
 
 
 class StickerForm(forms.ModelForm):

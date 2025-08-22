@@ -25,3 +25,20 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUserRegistration
         fields = ("username", "email")
+
+
+class UserShippingForm(forms.ModelForm):
+    class Meta:
+        model = CustomUserRegistration
+        fields = ['firstname', 'lastname', 'phone_number', 'province', 'city', 'address', 'postal_code', 'extrainfo']
+        widgets = {
+            'firstname': forms.TextInput(attrs={'placeholder': 'First Name'}),
+            'lastname': forms.TextInput(attrs={'placeholder': 'Last Name'}),
+            'phone_number': forms.TextInput(attrs={'placeholder': 'Phone Number'}),
+            'province': forms.TextInput(attrs={'placeholder': 'Province'}),
+            'city': forms.TextInput(attrs={'placeholder': 'City'}),
+            'address': forms.Textarea(attrs={'rows': 2, 'placeholder': 'Address'}),
+            'postal_code': forms.TextInput(attrs={'placeholder': 'Postal Code'}),
+            'extrainfo': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Extra Info'}),
+        }
+ProfileEditForm = UserShippingForm

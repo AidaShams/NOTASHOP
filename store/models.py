@@ -2,10 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
-# Create your models here.
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
@@ -15,6 +13,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Categories"
+
 
 class Sticker(models.Model):
     name = models.CharField(max_length=200)
@@ -43,22 +42,22 @@ class Sticker(models.Model):
         ordering = ['-created_at']
         verbose_name_plural = "Stickers"
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=200, blank=True)
-    phone = models.CharField(max_length=11, blank=True)
-    province = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=100, blank=True)
-    address = models.TextField(blank=True)
-    postal_code = models.CharField(max_length=20, blank=True)
-    extrainfo = models.TextField(blank=True)
+
+class Order(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    paid = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.full_name or str(self.user)
+        return f"Order {self.id} by {self.user.username}"
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-    else:
-        Profile.objects.get_or_create(user=instance)
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    sticker = models.ForeignKey('Sticker', on_delete=models.SET_NULL, null=True)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.sticker.name}"

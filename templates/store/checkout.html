@@ -7,16 +7,15 @@
         <p class="text-center">Your total was: <strong>{{ total_price }} $</strong></p>
 
         <div class="shipping-info">
-            <h3>Shipping Details</h3>
-            {% if profile.full_name and profile.address %}
-                <p><strong>Name:</strong> {{ profile.full_name }}</p>
-                <p><strong>Address:</strong> {{ profile.address }}</p>
-                <p><strong>City:</strong> {{ profile.city }}</p>
-                <p><strong>Postal Code:</strong> {{ profile.postal_code }}</p>
-                <p><strong>Country:</strong> {{ profile.country }}</p>
-            {% else %}
-                <p>You haven’t set up your shipping information yet.</p>
-                <a href="{% url 'profile' %}" class="btn">Add Shipping Info</a>
+            <h3>Shipping Details:</h3>
+            <p><strong>Name:</strong> {{ profile.full_name }}</p>
+            <p><strong>Phone:</strong> {{ profile.phone }}</p>
+            <p><strong>Province:</strong> {{ profile.province }}</p>
+            <p><strong>City:</strong> {{ profile.city }}</p>
+            <p><strong>Address:</strong> {{ profile.address }}</p>
+            <p><strong>Postal Code:</strong> {{ profile.postal_code }}</p>
+            {% if profile.extrainfo %}
+                <p><strong>Extra Info:</strong> {{ profile.extrainfo }}</p>
             {% endif %}
         </div>
 

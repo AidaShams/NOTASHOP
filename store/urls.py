@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import HomeView, StickerListView, StickerDetailView, CategoryListView, CategoryDetailView, sticker_create, \
-    cart_add, cart_remove, cart_detail, cart_decrement, checkout, sticker_search, profile_view
+    cart_add, cart_remove, cart_detail, cart_decrement, checkout, sticker_search, profile_view, purchase_history
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -16,9 +16,7 @@ urlpatterns = [
     path('cart/decrement/<int:sticker_id>/', cart_decrement, name='cart_decrement'),
     path('cart/checkout/', checkout, name='checkout'),
     path('profile/', profile_view, name='profile'),
+    path('purchase-history/', purchase_history, name='purchase_history'),
 ]
 
 # did the path with slugs instead of int:pk (making it more user-friendly)
-
-# TODO: make article app and import the views from there
-# i mean create/delete/detail/update

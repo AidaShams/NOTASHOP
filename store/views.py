@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.decorators import user_passes_test, login_required
-from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Sticker, Category, Profile
+from django.http import JsonResponse
+from .models import Sticker, Category, Order
 from .cart import Cart
 from .forms import StickerForm, CartAddForm, ProfileForm
-from django.http import JsonResponse
+from accounts.models import Profile
 
 
 class HomeView(TemplateView):
@@ -136,11 +137,22 @@ def cart_detail(request):
 
 @login_required
 def checkout(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+
+    required_fields = ['full_name', 'phone', 'province', 'city', 'address', 'postal_code']
+    missing_fields = [f for f in required_fields if not getattr(profile, f)]
+    if missing_fields:
+        return redirect(f"{reverse('profile')}?edit=1")
+
     cart = Cart(request)
     total_price = cart.get_total_price()
     items = list(cart)
-    profile, _ = Profile.objects.get_or_create(user=request.user)
-    cart.clear()
+
+    if request.method == "POST":
+        cart.clear()
+        return render(request, 'store/checkout_success.html',
+                      {'total_price': total_price, 'items': items, 'profile': profile})
+
     return render(request, 'store/checkout.html', {'total_price': total_price, 'items': items, 'profile': profile})
 
 
@@ -164,7 +176,7 @@ def profile_view(request):
         form = ProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect("profile")  #back to readonly mode
+            return redirect("profile")
     else:
         form = ProfileForm(instance=profile)
 
@@ -175,3 +187,11 @@ def profile_view(request):
         "form": form,
         "edit_mode": edit_mode
     })
+
+
+def purchase_history(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    orders = Order.objects.filter(user=request.user, paid=True).order_by('-created_at')
+    return render(request, 'store/purchase_history.html', {'orders': orders})
