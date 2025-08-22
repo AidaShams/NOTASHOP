@@ -1,12 +1,12 @@
 from django.urls import path
 from .views import HomeView, StickerListView, StickerDetailView, CategoryListView, CategoryDetailView, sticker_create, \
-    cart_add, cart_remove, cart_detail, cart_decrement, checkout, sticker_search
+    cart_add, cart_remove, cart_detail, cart_decrement, checkout, sticker_search, profile_view
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('stickers/', StickerListView.as_view(), name='sticker_list'),
     path('stickers/create/', sticker_create, name='sticker_create'),
-    path('stickers/search/', sticker_search, name='sticker_search'),  # <-- move this up
+    path('stickers/search/', sticker_search, name='sticker_search'),
     path('stickers/<slug:slug>/', StickerDetailView.as_view(), name='sticker_detail'),
     path('categories/', CategoryListView.as_view(), name='category_list'),
     path('categories/<slug:slug>/', CategoryDetailView.as_view(), name='category_detail'),
@@ -15,6 +15,7 @@ urlpatterns = [
     path('cart/remove/<int:sticker_id>/', cart_remove, name='cart_remove'),
     path('cart/decrement/<int:sticker_id>/', cart_decrement, name='cart_decrement'),
     path('cart/checkout/', checkout, name='checkout'),
+    path('profile/', profile_view, name='profile'),
 ]
 
 # did the path with slugs instead of int:pk (making it more user-friendly)

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>My Profile</h2>
+
+    {% if edit_mode %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Save</button>
+        </form>
+    {% else %}
+        <div class="profile-info">
+            <p><strong>Full Name:</strong> {{ profile.full_name }}</p>
+            <p><strong>Username:</strong> {{ profile.user.username }}</p>
+            <p><strong>Email:</strong> {{ profile.user.email }}</p>
+            <p><strong>Phone:</strong> {{ profile.phone }}</p>
+            <p><strong>Province:</strong> {{ profile.province }}</p>
+            <p><strong>City:</strong> {{ profile.city }}</p>
+            <p><strong>Address:</strong> {{ profile.address }}</p>
+            <p><strong>Postal Code:</strong> {{ profile.postal_code }}</p>
+            <p><strong>Extra Info:</strong> {{ profile.extrainfo }}</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <a href="?edit=1" class="btn">Edit</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

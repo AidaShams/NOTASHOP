@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Sticker, Category
-from .forms import StickerForm
+from .models import Sticker, Category, Profile
 from .cart import Cart
-from .forms import CartAddForm
+from .forms import StickerForm, CartAddForm, ProfileForm
 from django.http import JsonResponse
 
 
@@ -61,14 +60,11 @@ class CategoryDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['stickers'] = Sticker.objects.filter(
-            category=self.object,
-            is_active=True
-        )
+        context['stickers'] = Sticker.objects.filter(category=self.object, is_active=True)
         context["cart"] = Cart(self.request)
         return context
 
-#search function
+
 def sticker_search(request):
     query = request.GET.get('q', '')
     results = Sticker.objects.filter(
@@ -80,11 +76,7 @@ def sticker_search(request):
     for sticker in results:
         sticker.cart_quantity = cart.cart.get(str(sticker.id), {}).get("quantity", 0)
 
-    context = {
-        'stickers': results,
-        'query': query,
-    }
-    return render(request, 'store/sticker_search.html', context)
+    return render(request, 'store/sticker_search.html', {'stickers': results, 'query': query})
 
 
 def cart_add(request, sticker_id):
@@ -93,11 +85,7 @@ def cart_add(request, sticker_id):
     form = CartAddForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data
-        cart.add(
-            sticker=sticker,
-            quantity=cd['quantity'],
-            update_quantity=cd['update']
-        )
+        cart.add(sticker=sticker, quantity=cd['quantity'], update_quantity=cd['update'])
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         return JsonResponse({
             "success": True,
@@ -142,21 +130,20 @@ def cart_decrement(request, sticker_id):
 def cart_detail(request):
     cart = Cart(request)
     for item in cart:
-        item['update_quantity_form'] = CartAddForm(
-            initial={'quantity': item['quantity'], 'update': True}
-        )
+        item['update_quantity_form'] = CartAddForm(initial={'quantity': item['quantity'], 'update': True})
     return render(request, 'store/cart_detail.html', {'cart': cart})
 
 
+@login_required
 def checkout(request):
     cart = Cart(request)
     total_price = cart.get_total_price()
     items = list(cart)
+    profile, _ = Profile.objects.get_or_create(user=request.user)
     cart.clear()
-    return render(request, 'store/checkout.html', {'total_price': total_price, 'items': items})
+    return render(request, 'store/checkout.html', {'total_price': total_price, 'items': items, 'profile': profile})
 
 
-# only admin can see create sticker menu
 @user_passes_test(lambda u: u.is_superuser)
 def sticker_create(request):
     if request.method == 'POST':
@@ -167,3 +154,24 @@ def sticker_create(request):
     else:
         form = StickerForm()
     return render(request, 'store/sticker_form.html', {'form': form})
+
+
+@login_required
+def profile_view(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("profile")  #back to readonly mode
+    else:
+        form = ProfileForm(instance=profile)
+
+    edit_mode = request.GET.get("edit") == "1"
+
+    return render(request, "store/profile.html", {
+        "profile": profile,
+        "form": form,
+        "edit_mode": edit_mode
+    })

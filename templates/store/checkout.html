@@ -2,27 +2,41 @@
 {% block title %}Checkout{% endblock %}
 
 {% block content %}
-<div class="cart-container">
-    <h2 class="text-center">Thank You for Your Purchase!</h2>
-    <p class="text-center">Your total was: <strong>{{ total_price }} $</strong></p>
+    <div class="cart-container">
+        <h2 class="text-center">Thank You for Your Purchase!</h2>
+        <p class="text-center">Your total was: <strong>{{ total_price }} $</strong></p>
 
-    {% if items %}
-        <div class="products">
-            {% for item in items %}
-                <div class="product-card">
-                    <img src="{{ item.sticker.image.url }}" alt="{{ item.sticker.name }}">
-                    <div class="cart-item-info">
-                        <span class="cart-item-name">{{ item.sticker.name }}</span>
-                        <span class="cart-item-price">Quantity: {{ item.quantity }}</span>
-                        <span class="cart-item-price">Subtotal: {{ item.total_price }} $</span>
-                    </div>
-                </div>
-            {% endfor %}
+        <div class="shipping-info">
+            <h3>Shipping Details</h3>
+            {% if profile.full_name and profile.address %}
+                <p><strong>Name:</strong> {{ profile.full_name }}</p>
+                <p><strong>Address:</strong> {{ profile.address }}</p>
+                <p><strong>City:</strong> {{ profile.city }}</p>
+                <p><strong>Postal Code:</strong> {{ profile.postal_code }}</p>
+                <p><strong>Country:</strong> {{ profile.country }}</p>
+            {% else %}
+                <p>You haven’t set up your shipping information yet.</p>
+                <a href="{% url 'profile' %}" class="btn">Add Shipping Info</a>
+            {% endif %}
         </div>
-    {% endif %}
 
-    <div class="text-center" style="margin-top:1rem;">
-        <a href="{% url 'sticker_list' %}" class="btn">Continue Shopping</a>
+        {% if items %}
+            <div class="products">
+                {% for item in items %}
+                    <div class="product-card">
+                        <img src="{{ item.sticker.image.url }}" alt="{{ item.sticker.name }}">
+                        <div class="cart-item-info">
+                            <span class="cart-item-name">{{ item.sticker.name }}</span>
+                            <span class="cart-item-price">Quantity: {{ item.quantity }}</span>
+                            <span class="cart-item-price">Subtotal: {{ item.total_price }} $</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="text-center" style="margin-top:1rem;">
+            <a href="{% url 'sticker_list' %}" class="btn">Continue Shopping</a>
+        </div>
     </div>
-</div>
 {% endblock %}
