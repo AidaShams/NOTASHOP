@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect
+from django.db.models import Q
 from .models import Sticker, Category
 from .forms import StickerForm
 from .cart import Cart
@@ -66,6 +67,24 @@ class CategoryDetailView(DetailView):
         )
         context["cart"] = Cart(self.request)
         return context
+
+#search function
+def sticker_search(request):
+    query = request.GET.get('q', '')
+    results = Sticker.objects.filter(
+        Q(name__icontains=query) | Q(description__icontains=query) | Q(tags__icontains=query),
+        is_active=True
+    ) if query else Sticker.objects.none()
+
+    cart = Cart(request)
+    for sticker in results:
+        sticker.cart_quantity = cart.cart.get(str(sticker.id), {}).get("quantity", 0)
+
+    context = {
+        'stickers': results,
+        'query': query,
+    }
+    return render(request, 'store/sticker_search.html', context)
 
 
 def cart_add(request, sticker_id):

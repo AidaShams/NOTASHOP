@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+    <h2 class="text-center">Search Results for "{{ query }}"</h2>
+
+    {% if stickers %}
+        <div class="products">
+            {% for sticker in stickers %}
+                <div class="product-card" data-sticker-id="{{ sticker.id }}">
+                    {% if sticker.image %}
+                        <img src="{{ sticker.image.url }}" alt="{{ sticker.name }}">
+                    {% endif %}
+                    <h3>{{ sticker.name }}</h3>
+                    <p><strong>Price:</strong> {{ sticker.price }} $</p>
+
+                    <div class="sticker-actions">
+                        <form class="cart-decrement" action="{% url 'cart_decrement' sticker.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn">-</button>
+                        </form>
+
+                        <span class="quantity">{{ sticker.cart_quantity|default:"0" }}</span>
+
+                        <form class="add-to-cart-form" action="{% url 'cart_add' sticker.id %}" method="post"
+                              data-sticker-id="{{ sticker.id }}">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <input type="hidden" name="update" value="False">
+                            <button type="submit" class="btn">+</button>
+                        </form>
+
+                        <form class="cart-remove" action="{% url 'cart_remove' sticker.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn remove-btn">🗑️</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No stickers found for "{{ query }}".</p>
+    {% endif %}
+{% endblock %}
